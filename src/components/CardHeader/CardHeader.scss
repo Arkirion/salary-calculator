@@ -1,0 +1,30 @@
+@import '../../index.scss';
+
+.coinValue{
+
+  padding: $p-5;
+  border-radius: $br-8 $br-8 0px 0px;
+
+  div{
+    @include setFlex(center);
+    font-weight: $font-w-bolder;
+    letter-spacing: 1.5px;
+    color: $color-white;
+  }
+
+  div:nth-child(1){
+    color: $color-transparent-white;
+  }
+}
+
+.color-dolar{
+  background-color: $color-dolar;
+}
+
+.color-dolarBlue{
+  background-color: $color-dolar-blue;
+}
+
+.color-pesosArg{
+  background-color: $color-argentinian-peso;
+}

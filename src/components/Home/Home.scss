@@ -1,0 +1,52 @@
+@import '../../index.scss';
+
+.main-section{
+  padding: $p-20;
+
+  .money-section{
+    padding:$p-20;
+    @include setFlex(space, column)
+  }
+
+
+  .info-frame{
+    @include setFlex(center);
+    @media (max-width: $breakpoint-sm) {
+      @include setFlex(center, column)
+    }
+
+    .info-wrapper{
+      flex: 1;
+      margin: $m-5;
+      border-radius: $br-8;
+      @include shadow($box-shadow-light);
+
+      .info-item-list{
+        padding: $p-10;
+      }
+    }
+  
+  }
+
+  .actions-section{
+    @include setFlex(center);
+    padding: $p-30 0 0 0;
+  }
+
+  .btn{
+    background-color: #1FBFF1; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 36px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: $fs-12;
+    letter-spacing: 0.0625em;
+    border-radius: $br-8;
+  }
+}
+
+.header-explanation {
+  font-size: 12px;
+}
