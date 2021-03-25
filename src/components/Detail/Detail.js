@@ -1,42 +1,31 @@
 import './Detail.scss';
 import {toArgentinaCurrency} from '../../base/utils';
 
-
-
-const Detail = (props) => {
-  const calculateAmount = (action, money, divisor, coinValue) => {
+function Detail(props){
+  const calculateAmount = ( decimalPlaces ) => {
     let periodAmount = 0;
     const weekDivisor = 4;
     const dayMultiplier = 8; // hours per day
     const yearMultiplier = 12; // amount of months on a year
 
-    switch (action) {
-      case 'hour':
-        periodAmount = money / divisor
-        break;
-      case 'day':
-        periodAmount = (money / divisor) * dayMultiplier
-        break;
-      case 'week':
-        periodAmount = money / weekDivisor
-        break;
-      case 'month':
-        periodAmount = money
-        break;
-      case 'year':
-        periodAmount = money * yearMultiplier
-        break;
+    const periodCalculator = {
+      'hour' : () => { return props.money / props.divisor },
+      'day' : () => { return (props.money / props.divisor) * dayMultiplier },
+      'week' : () => { return periodAmount = props.money / weekDivisor},
+      'month' : () => {return  periodAmount = props.money },
+      'year' : () => { return periodAmount = props.money * yearMultiplier },
     }
-    return toArgentinaCurrency(periodAmount / parseFloat(coinValue) , 2);
+    const calculatedValue = periodCalculator[props.detail.action]();
+
+    return toArgentinaCurrency(calculatedValue / parseFloat(props.coinValue) , decimalPlaces);
   }
 
   return (
     <div className="info-item" key={props.detail.action}>
       <p>{props.detail.label}</p>
-      <p>{ 
-        calculateAmount(
-          props.detail.action, props.money, props.divisor, props.coinValue
-          ) || ''
+      <p title={calculateAmount(5) || ''}>
+        { 
+          calculateAmount(2) || ''
         }
       </p>
     </div>

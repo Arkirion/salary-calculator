@@ -1,7 +1,7 @@
 import './CardHeader.scss';
 
 
-const CardHeader = (props) =>{
+function CardHeader (props){
   return (
     <header className={`coinValue ${props.coinInfo.color} `}>
       <div>

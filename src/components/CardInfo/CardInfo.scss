@@ -1,0 +1,12 @@
+@import '../../index.scss';
+
+.info-wrapper{
+  flex: 1;
+  margin: $m-5;
+  border-radius: $br-8;
+  @include shadow($box-shadow-light);
+
+  .info-item-list{
+    padding: $p-10;
+  }
+}
