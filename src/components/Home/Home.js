@@ -15,27 +15,25 @@ function Home (){
   const dolarEndpoint = 'https://www.dolarsi.com/api/api.php?type=valoresprincipales';
 
   const [amount, setAmount] = useState(0)
-  const [dolar, setDolar] = useState()
-  const [dolarBlue, setDolarBlue] = useState()
+  const [dolar, setDolar] = useState(0)
+  const [dolarBlue, setDolarBlue] = useState(0)
   const [argentinaPeso, setArgentinaPeso] = useState(ARGENTINA_VALUE_DIVISOR)
 
   async function getDolarData(){
     const response = await fetch(dolarEndpoint);
-    const data = await response.json();
-    setDolar( data[0].casa.compra);
+    return await response.json();
   }
 
-  async function getDolarBlueData(){
-    const response = await fetch(dolarEndpoint);
-    const data = await response.json();
-    setDolarBlue(data[1].casa.compra);
-  }
-
-  useEffect(() => {
+  useEffect(async () => {
     // CoinList should be an array with the next values 'Dolar', 'Dolar blue', 'Argentina peso'
-    coinList.push(getDolarData())
-    coinList.push(getDolarBlueData())
+    const data = await getDolarData();
+    console.count('useEffecttest')
+    coinList.push(data[0].casa.compra)
+    coinList.push(data[1].casa.compra)
     coinList.push(ARGENTINA_VALUE_DIVISOR)
+
+    coinList.map( (element, index) => CoinInfo[index].price = element );
+
   }, []);
 
 
@@ -61,8 +59,14 @@ function Home (){
         <section className="info-frame">
           { CoinInfo.map( coin => 
             <CardInfo key={coin.label}
-              header={<CardHeader coinValue={dolar} coinInfo={coin} />}
-              details={InfoDetails.map(detail => <Detail key={detail.action} detail={detail} money={amount} divisor={DEFAULT_HOURS_DIVISOR} coinValue={dolar} />)}
+              header={<CardHeader coinValue={coin.price} coinInfo={coin} />}
+              details={InfoDetails.map(detail => 
+                <Detail 
+                  key={detail.action} 
+                  detail={detail} 
+                  money={amount} 
+                  divisor={DEFAULT_HOURS_DIVISOR} 
+                  coinValue={coin.price} />)}
             /> 
           )}
         </section>
