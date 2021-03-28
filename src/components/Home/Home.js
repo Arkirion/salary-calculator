@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, React, useRef} from 'react';
 import '../../index.scss';
 import './Home.scss';
 import Detail from '../Detail/Detail';
@@ -6,6 +6,8 @@ import CardInfo from '../CardInfo/CardInfo';
 import TextField from '@material-ui/core/TextField';
 import CardHeader  from '../CardHeader/CardHeader';
 import {CoinInfo, InfoDetails} from '../../base/enum';
+import ReactToPdf from "react-to-pdf";
+import { useScreenshot, createFileName } from "use-react-screenshot";
 
 
 function Home (){
@@ -14,10 +16,24 @@ function Home (){
   const ARGENTINA_VALUE_DIVISOR = 1; // it always should be 1 since its the main value
   const dolarEndpoint = 'https://www.dolarsi.com/api/api.php?type=valoresprincipales';
 
+  const componentRef = useRef();
+
   const [amount, setAmount] = useState(0)
-  const [dolar, setDolar] = useState(0)
-  const [dolarBlue, setDolarBlue] = useState(0)
-  const [argentinaPeso, setArgentinaPeso] = useState(ARGENTINA_VALUE_DIVISOR)
+  const [image, takeScreenShot] = useScreenshot({
+    type: "image/jpeg",
+    quality: 1.0
+  });
+
+  const download = (image, { extension = "jpg" } = {}) => {
+    const date = new Date().toLocaleString();
+    const name = (date+'CalculadoraDolar').replace(' ','__');
+    const a = document.createElement("a");
+    a.href = image;
+    a.download = createFileName(extension, name);
+    a.click();
+  };
+
+  const downloadScreenshot = () => takeScreenShot(componentRef.current).then(download);
 
   async function getDolarData(){
     const response = await fetch(dolarEndpoint);
@@ -27,7 +43,6 @@ function Home (){
   useEffect(async () => {
     // CoinList should be an array with the next values 'Dolar', 'Dolar blue', 'Argentina peso'
     const data = await getDolarData();
-    console.count('useEffecttest')
     coinList.push(data[0].casa.compra)
     coinList.push(data[1].casa.compra)
     coinList.push(ARGENTINA_VALUE_DIVISOR)
@@ -36,22 +51,36 @@ function Home (){
 
   }, []);
 
+  // let delayTimer = null;
+
+  // function handleOnChangeAmount(value) {
+  //   setAmount(value);
+
+  //   if (delayTimer) {  
+  //     clearTimeout(delayTimer);
+  //   }
+  //   delayTimer = setTimeout(function() {
+  //     setDelayedAmount(value); //this is your existing function
+  //   }, 4000);
+  // }
+
 
 
 
   return (
     <div className="wrapper">
       <header className="header-explanation">
-        Esta página fue creada para mostrar el valor de tu dinero en dolares, esta APP fue creada con el objetivo original de medir
-        cuanto vale un sueldo cada mes en dolares y hacer una pequeña métrica de cuanto la inflación se va comiendo un sueldo.
+        Esta página fue creada para mostrar el valor de tu dinero en dolares, por ejemplo, tu sueldo mensual neto en dolares.
       </header>
-      <main className="main-section">
+      <main className="main-section" ref={componentRef}>
         <section className="money-section">
           <TextField
             id="amount-input"
             label="Monto por mes"
             type="number"
-            onChange={event => { setAmount(event.target.value) }}
+            onChange={event => { 
+              setAmount(event.target.value)
+            }}
             value={amount}
             variant="outlined" />
         </section>
@@ -73,7 +102,10 @@ function Home (){
         
 
         <section className="actions-section">
-          <button className="btn"> Guardar </button>
+          <button className="btn" onClick={downloadScreenshot}> Guardar Imagen </button>
+          {/* <ReactToPdf  targetRef={componentRef} filename="code-example.pdf">
+            {({ toPdf }) => <button  className="btn" onClick={toPdf}>Generate Pdf</button>}
+          </ReactToPdf > */}
         </section>
       </main>
     </div>

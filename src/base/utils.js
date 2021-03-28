@@ -1,5 +1,5 @@
 
-export const toArgentinaCurrency = (value, decimals = 4) =>{
+export const formatToArgentinaCurrency = (value, decimals = 2) =>{
   return value.toLocaleString('es-ar', {
     style: 'currency',
     currency: 'ARS',

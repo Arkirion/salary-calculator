@@ -1,29 +1,38 @@
 import './Detail.scss';
-import {toArgentinaCurrency} from '../../base/utils';
+import {formatToArgentinaCurrency} from '../../base/utils';
 
 function Detail(props){
-  const calculateAmount = ( decimalPlaces ) => {
-    let periodAmount = 0;
-    const weekDivisor = 4;
-    const dayMultiplier = 8; // hours per day
-    const yearMultiplier = 12; // amount of months on a year
+  console.count(props.action);
 
+  const calculateAmountByPeriod = (action) =>{
+    let periodAmount = 0;
+    // TODO : evualate add 'Period' enum 
+    const weeksPerMonth = 4;
+    const hoursPerDay = 8;
+    const monthsPerYear = 12; 
     const periodCalculator = {
       'hour' : () => { return props.money / props.divisor },
-      'day' : () => { return (props.money / props.divisor) * dayMultiplier },
-      'week' : () => { return periodAmount = props.money / weekDivisor},
+      'day' : () => { return (props.money / props.divisor) * hoursPerDay },
+      'week' : () => { return periodAmount = props.money / weeksPerMonth},
       'month' : () => {return  periodAmount = props.money },
-      'year' : () => { return periodAmount = props.money * yearMultiplier },
+      'year' : () => { return periodAmount = props.money * monthsPerYear },
     }
-    const calculatedValue = periodCalculator[props.detail.action]();
+    return periodCalculator[action]();
+  }
 
-    return toArgentinaCurrency(calculatedValue / parseFloat(props.coinValue) , decimalPlaces);
+  const calculateAmount = ( decimalPlaces ) => {
+    const coinValue = Number.parseFloat(props.coinValue);
+    if ( Number.isNaN(coinValue)) return "$ 0,00";
+    const calculatedValue = calculateAmountByPeriod(props.detail.action);
+    const amountDividedByCoinValue =  calculatedValue / coinValue.toFixed();
+    const formatedValue = formatToArgentinaCurrency( amountDividedByCoinValue , decimalPlaces)
+    return formatedValue;
   }
 
   return (
     <div className="info-item" key={props.detail.action}>
       <p>{props.detail.label}</p>
-      <p title={calculateAmount(5) || ''}>
+      <p title={calculateAmount(5)|| ''}>
         { 
           calculateAmount(2) || ''
         }
