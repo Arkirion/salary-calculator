@@ -1,17 +1,12 @@
-import './CardHeader.scss';
+import "./CardHeader.scss";
 
-
-function CardHeader (props){
+function CardHeader({ label, color, coinPrice }) {
   return (
-    <header className={`coinValue ${props.coinInfo.color} `}>
-      <div>
-        {props.coinInfo.label}
-      </div>
-      <div>
-        $ {props.coinValue}
-      </div>
+    <header className={`coinValue ${color} `}>
+      <div>{label}</div>
+      <div>$ {coinPrice}</div>
     </header>
-  )
+  );
 }
 
-export default CardHeader
+export default CardHeader;

@@ -1,15 +1,14 @@
 // _mixins.scss
 
-
-@mixin setFlex($justify : flex-start, $direction : row) {
+@mixin setFlex($justify: flex-start, $direction: row) {
   display: flex;
   flex-direction: $direction;
   justify-content: $justify;
 }
 
-@mixin shadow($value : $box-shadow-normal ) {
+@mixin shadow($value: $box-shadow-normal) {
   box-shadow: $value;
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 @mixin text-elipsis {

@@ -1,40 +1,38 @@
-@import '../../index.scss';
+@import "../../index.scss";
 
-.main-section{
+.main-section {
   padding: $p-20;
 
-  .money-section{
-    padding:$p-20;
-    @include setFlex(space, column)
+  .money-section {
+    padding: $p-20;
+    @include setFlex(space, column);
   }
 
-
-  .info-frame{
+  .info-frame {
     @include setFlex(center);
     @media (max-width: $breakpoint-sm) {
-      @include setFlex(center, column)
+      @include setFlex(center, column);
     }
 
-    .info-wrapper{
+    .info-wrapper {
       flex: 1;
       margin: $m-5;
       border-radius: $br-8;
       @include shadow($box-shadow-light);
 
-      .info-item-list{
+      .info-item-list {
         padding: $p-10;
       }
     }
-  
   }
 
-  .actions-section{
+  .actions-section {
     @include setFlex(center);
     padding: $p-30 0 0 0;
   }
 
-  .btn{
-    background-color: #1FBFF1; /* Green */
+  .btn {
+    background-color: #1fbff1; /* Green */
     border: none;
     color: white;
     padding: 8px 36px;
@@ -49,4 +47,5 @@
 
 .header-explanation {
   font-size: 12px;
+  text-align: center;
 }

@@ -1,17 +1,17 @@
-@import '../../index.scss';
+@import "../../index.scss";
 
-.info-item{
+.info-item {
   font-family: $font-montserrat;
   padding-top: $p-20;
   font-size: $p-10;
 
-  p:nth-child(1){
-    color: $color-grey-dark-2
+  p:nth-child(1) {
+    color: $color-grey-dark-2;
   }
 
-  p:nth-child(2){
+  p:nth-child(2) {
     font-weight: $font-w-normal;
-    font-size: $fs-12 ;
+    font-size: $fs-12;
     color: $color-black;
   }
 }
