@@ -2,24 +2,24 @@ import "./Detail.scss";
 import { formatToArgentinaCurrency } from "../../base/utils";
 import { Period } from "../../base/enum";
 
-function Detail({ label, action, money, coinPrice, divisor }) {
+function Detail({ label, action, money, coinPrice, hours }) {
+
   const calculateAmountByPeriod = (action) => {
-    let periodAmount = 0;
     const periodCalculator = {
       hour: () => {
-        return money / divisor;
+        return money / hours;
       },
       day: () => {
-        return (money / divisor) * Period.HOURS_PER_DAY;
+        return (money / hours) * Period.HOURS_PER_DAY;
       },
       week: () => {
-        return (periodAmount = money / Period.WEEKS_PER_MONTH);
+        return money / Period.WEEKS_PER_MONTH;
       },
       month: () => {
-        return (periodAmount = money);
+        return money;
       },
       year: () => {
-        return (periodAmount = money * Period.MONTHS_PER_YEAR);
+        return money * Period.MONTHS_PER_YEAR;
       },
     };
     return periodCalculator[action]();

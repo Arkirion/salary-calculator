@@ -5,17 +5,32 @@ import CardInfo from "../CardInfo/CardInfo";
 import DownloadButton from "../DownloadButton/DownloadButton";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { coinInfoOptions, InfoDetails } from "../../base/enum";
 
 function Home() {
   const [amount, setAmount] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+  const [asset, setAsset] = useState("ARG");
+  const [coin, setCoin] = useState({
+    oficialDolar: {
+      price: "",
+      label: "DOLAR OFICIAL",
+      classColor: "color-dolar",
+    },
+    blueDolar: {
+      price: "",
+      label: "DOLAR BLUE",
+      classColor: "color-dolarBlue",
+    },
+    argentinePeso: {
+      price: "1",
+      label: "PESOS ARGENTINOS",
+      classColor: "color-pesosArg",
+    },
+  });
 
   // const [dolarPrice, setDolarPrice] = useState(["0","0","0"])
 
-  const coinList = [];
   const DEFAULT_HOURS_DIVISOR = 160; // average hours that people work
-  const ARGENTINA_VALUE_DIVISOR = "1"; // it always should be 1 since its the main value
   const dolarEndpoint =
     "https://www.dolarsi.com/api/api.php?type=valoresprincipales";
 
@@ -31,31 +46,26 @@ function Home() {
       const data = await getDolarData();
       const dolar = data[0].casa.compra;
       const dolarBlue = data[1].casa.compra;
-      coinList.push(dolar);
-      coinList.push(dolarBlue);
-      coinList.push(ARGENTINA_VALUE_DIVISOR);
-      coinList.map(
-        (element, index) => (coinInfoOptions[index].price = element)
-      );
-
+      setCoin((prevState) => ({
+        ...prevState,
+        oficialDolar: {
+          ...prevState.oficialDolar,
+          price: dolar,
+        },
+        blueDolar: {
+          ...prevState.blueDolar,
+          price: dolarBlue,
+        },
+      }));
       setIsLoaded(true);
     };
 
     fetchDolarData();
   }, []);
 
-  // let delayTimer = null;
-
-  // function handleOnChangeAmount(value) {
-  //   setAmount(value);
-
-  //   if (delayTimer) {
-  //     clearTimeout(delayTimer);
-  //   }
-  //   delayTimer = setTimeout(function() {
-  //     setDelayedAmount(value); //this is your existing function
-  //   }, 4000);
-  // }
+  async function onChangeAsset(value) {
+    setAsset(value);
+  }
 
   return (
     <div className="wrapper">
@@ -80,13 +90,12 @@ function Home() {
         <section className="info-frame">
           {isLoaded ? (
             <>
-              {coinInfoOptions.map((coinInfoElement) => (
+              { Object.keys(coin).map((key) => (
                 <CardInfo
-                  key={coinInfoElement.label}
-                  coinInfo={coinInfoElement}
-                  details={InfoDetails}
+                  key={coin[key].label}
+                  coinInfo={coin[key]}
                   money={amount}
-                  divisor={DEFAULT_HOURS_DIVISOR}
+                  hours={DEFAULT_HOURS_DIVISOR}
                 />
               ))}
             </>
