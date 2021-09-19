@@ -15,6 +15,12 @@ function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [asset, setAsset] = useState("ARG"); // ARG, USD, USDBLUE
   const [coin, setCoin] = useState({
+    ARGS: {
+      symbol: "ARG",
+      price: "1",
+      label: "PESOS ARGENTINOS",
+      classColor: "color-pesosArg",
+    },
     USD: {
       symbol: "USD",
       price: "",
@@ -26,12 +32,6 @@ function Home() {
       price: "",
       label: "DOLAR BLUE",
       classColor: "color-dolarBlue",
-    },
-    ARGS: {
-      symbol: "ARG",
-      price: "1",
-      label: "PESOS ARGENTINOS",
-      classColor: "color-pesosArg",
     },
   });
 
@@ -90,7 +90,7 @@ function Home() {
             <FormControlLabel
               value="ARG"
               control={<Radio color="primary" />}
-              label="ARGS"
+              label="PESOS ARG"
               labelPlacement="start"
             />
             <FormControlLabel
@@ -123,7 +123,6 @@ function Home() {
         <section className="info-frame">
           {isLoaded ? (
             <>
-             {console.log(1, amount)}
               { Object.keys(coin).map((coinSymbol) => (
                 <CardInfo
                   key={coinSymbol}

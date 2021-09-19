@@ -5,9 +5,7 @@ import { detailsEnum } from "../../base/enum";
 
 
 function CardInfo({ coinInfo, coinSymbol , balance, hours, asset }) {
-  console.log(coinSymbol)
   const { label, classColor, price } = coinInfo[coinSymbol];
-
 
   const setArgsValues = {
     USD: () => {
