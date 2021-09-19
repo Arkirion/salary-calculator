@@ -2,24 +2,23 @@ import "./Detail.scss";
 import { formatToArgentinaCurrency } from "../../base/utils";
 import { Period } from "../../base/enum";
 
-function Detail({ label, action, money, coinPrice, hours }) {
-
-  const calculateAmountByPeriod = (action) => {
+function Detail({ label, action, balance, coinPrice, hours }) {
+  const getAmountByPeriod = (action) => {
     const periodCalculator = {
       hour: () => {
-        return money / hours;
+        return balance / hours;
       },
       day: () => {
-        return (money / hours) * Period.HOURS_PER_DAY;
+        return (balance / hours) * Period.HOURS_PER_DAY;
       },
       week: () => {
-        return money / Period.WEEKS_PER_MONTH;
+        return balance / Period.WEEKS_PER_MONTH;
       },
       month: () => {
-        return money;
+        return balance;
       },
       year: () => {
-        return money * Period.MONTHS_PER_YEAR;
+        return balance * Period.MONTHS_PER_YEAR;
       },
     };
     return periodCalculator[action]();
@@ -27,20 +26,24 @@ function Detail({ label, action, money, coinPrice, hours }) {
 
   const calculateAmount = (decimalPlaces) => {
     const coinValue = Number.parseFloat(coinPrice);
+
     if (Number.isNaN(coinValue)) return "$ 0,00";
-    const calculatedValue = calculateAmountByPeriod(action);
-    const amountDividedByCoinValue = calculatedValue / coinValue.toFixed();
+    const amountByPeriod = getAmountByPeriod(action);
+
+    // const amountDividedByCoinValue = amountByPeriod / coinValue.toFixed(4);
     const formatedValue = formatToArgentinaCurrency(
-      amountDividedByCoinValue,
+      // amountDividedByCoinValue,
+      amountByPeriod,
       decimalPlaces
     );
+    console.log(typeof formatedValue)
     return formatedValue;
   };
 
   return (
     <div className="info-item" key={action}>
       <p>{label}</p>
-      <p title={calculateAmount(5) || ""}>{calculateAmount(2) || ""}</p>
+      <p title={calculateAmount(5) || ""}>{calculateAmount(2).replace(/\,0+$/,'') || ""}</p>
     </div>
   );
 }

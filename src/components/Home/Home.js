@@ -4,31 +4,37 @@ import "./Home.scss";
 import CardInfo from "../CardInfo/CardInfo";
 import DownloadButton from "../DownloadButton/DownloadButton";
 import TextField from "@material-ui/core/TextField";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 function Home() {
   const [amount, setAmount] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [asset, setAsset] = useState("ARG");
+  const [asset, setAsset] = useState("ARG"); // ARG, USD, USDBLUE
   const [coin, setCoin] = useState({
-    oficialDolar: {
+    USD: {
+      symbol: "USD",
       price: "",
       label: "DOLAR OFICIAL",
       classColor: "color-dolar",
     },
-    blueDolar: {
+    USDBLUE: {
+      symbol: "USDBLUE",
       price: "",
       label: "DOLAR BLUE",
       classColor: "color-dolarBlue",
     },
-    argentinePeso: {
+    ARGS: {
+      symbol: "ARG",
       price: "1",
       label: "PESOS ARGENTINOS",
       classColor: "color-pesosArg",
     },
   });
 
-  // const [dolarPrice, setDolarPrice] = useState(["0","0","0"])
 
   const DEFAULT_HOURS_DIVISOR = 160; // average hours that people work
   const dolarEndpoint =
@@ -48,12 +54,12 @@ function Home() {
       const dolarBlue = data[1].casa.compra;
       setCoin((prevState) => ({
         ...prevState,
-        oficialDolar: {
-          ...prevState.oficialDolar,
+        USD: {
+          ...prevState.USD,
           price: dolar,
         },
-        blueDolar: {
-          ...prevState.blueDolar,
+        USDBLUE: {
+          ...prevState.USDBLUE,
           price: dolarBlue,
         },
       }));
@@ -70,10 +76,37 @@ function Home() {
   return (
     <div className="wrapper">
       <header className="header-explanation">
-        Esta página fue creada para mostrar el valor de tu dinero en dolares,
-        por ejemplo, tu sueldo mensual neto en dolares.
+        Esta página fue creada para mostrar el valor de tu dinero en dolares
       </header>
       <main className="main-section" ref={componentRef}>
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="position"
+            name="position"
+            defaultValue="ARG"
+            onChange={(event) => onChangeAsset(event.target.value)}
+          >
+            <FormControlLabel
+              value="ARG"
+              control={<Radio color="primary" />}
+              label="ARGS"
+              labelPlacement="start"
+            />
+            <FormControlLabel
+              value="USD"
+              control={<Radio color="secondary" />}
+              label="DOLAR"
+              labelPlacement="start"
+            />
+            <FormControlLabel
+              value="USDBLUE"
+              control={<Radio color="secondary" />}
+              label="DOLAR BLUE"
+              labelPlacement="start"
+            />
+          </RadioGroup>
+        </FormControl>
         <section className="money-section">
           <TextField
             id="amount-input"
@@ -90,12 +123,15 @@ function Home() {
         <section className="info-frame">
           {isLoaded ? (
             <>
-              { Object.keys(coin).map((key) => (
+             {console.log(1, amount)}
+              { Object.keys(coin).map((coinSymbol) => (
                 <CardInfo
-                  key={coin[key].label}
-                  coinInfo={coin[key]}
-                  money={amount}
+                  key={coinSymbol}
+                  coinInfo={coin}
+                  coinSymbol={coinSymbol}
+                  balance={amount}
                   hours={DEFAULT_HOURS_DIVISOR}
+                  asset={asset}
                 />
               ))}
             </>

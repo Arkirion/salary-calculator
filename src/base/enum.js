@@ -1,8 +1,8 @@
 export const detailsEnum = Object.freeze([
-  { label: "por hora", action: "hour" },
-  { label: "por día", action: "day" },
-  { label: "por semana", action: "week" },
   { label: "por mes", action: "month" },
+  { label: "por semana", action: "week" },
+  { label: "por día", action: "day" },
+  { label: "por hora", action: "hour" },
   { label: "por año", action: "year" },
 ]);
 
