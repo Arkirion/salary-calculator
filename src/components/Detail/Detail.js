@@ -25,6 +25,7 @@ function Detail({ label, action, balance, coinPrice, hours }) {
   };
 
   const formatValue = (amount, decimalPlaces) =>{
+    amount = parseFloat(amount)
     return formatToArgentinaCurrency(
       amount,
       decimalPlaces
@@ -33,23 +34,22 @@ function Detail({ label, action, balance, coinPrice, hours }) {
 
   const calculateAmount = () => {
     const coinValue = Number.parseFloat(coinPrice);
-    if (action === 'month') {
-      console.log('->', getAmountByPeriod(action))
-    }
     if (Number.isNaN(coinValue)) return "$ 0,00";
     return getAmountByPeriod(action) || 0;
   };
 
   const amountByPeriod = calculateAmount();
 
+
   const titleAmount = formatValue(amountByPeriod, 5);
   const displayedAmount = formatValue(amountByPeriod, 2)
-
 
   return (
     <div className="info-item" key={action}>
       <p>{label}</p>
-      <p title={titleAmount || ""}>{displayedAmount.replace(/\,0+$/,'') || ""}</p>
+      <p title={titleAmount || ""}>
+        {displayedAmount.replace(/\,0+$/, "") || ""}
+      </p>
     </div>
   );
 }

@@ -9,11 +9,12 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 
 function Home() {
   const [amount, setAmount] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [asset, setAsset] = useState("ARG"); // ARG, USD, USDBLUE
+  const [asset, setAsset] = useState("ARGS"); // ARG, USD, USDBLUE
   const [coin, setCoin] = useState({
     ARGS: {
       symbol: "ARG",
@@ -50,8 +51,8 @@ function Home() {
   useEffect(() => {
     const fetchDolarData = async () => {
       const data = await getDolarData();
-      const dolar = data[0].casa.compra;
-      const dolarBlue = data[1].casa.compra;
+      const dolar = data[0].casa.venta;
+      const dolarBlue = data[1].casa.venta;
       setCoin((prevState) => ({
         ...prevState,
         USD: {
@@ -84,11 +85,11 @@ function Home() {
             row
             aria-label="position"
             name="position"
-            defaultValue="ARG"
+            defaultValue="ARGS"
             onChange={(event) => onChangeAsset(event.target.value)}
           >
             <FormControlLabel
-              value="ARG"
+              value="ARGS"
               control={<Radio color="primary" />}
               label="PESOS ARG"
               labelPlacement="start"
@@ -108,7 +109,9 @@ function Home() {
           </RadioGroup>
         </FormControl>
         <section className="money-section">
-          <TextField
+          {
+          /* Keeping this code as example
+             <TextField
             id="amount-input"
             label="Monto por mes"
             type="number"
@@ -117,6 +120,21 @@ function Home() {
             }}
             value={amount}
             variant="outlined"
+          /> */}
+          <CurrencyTextField
+            id="amount-input"
+            autoFocus = {true}
+            label="Monto por mes"
+            variant="outlined"
+            decimalCharacter=","
+            digitGroupSeparator="."
+            value={amount}
+            currencySymbol="$"
+            outputFormat="string"
+            textAlign = "left"
+            maximumValue={100000000000}
+            minimumValue={0}
+            onChange={(event, value)=> setAmount(value)}
           />
         </section>
 

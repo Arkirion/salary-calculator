@@ -3,64 +3,46 @@ import Detail from "../Detail/Detail";
 import CardHeader from "../CardHeader/CardHeader";
 import { detailsEnum } from "../../base/enum";
 
-
-function CardInfo({ coinInfo, coinSymbol , balance, hours, asset }) {
+function CardInfo({ coinInfo, coinSymbol, balance, hours, asset }) {
   const { label, classColor, price } = coinInfo[coinSymbol];
 
-  const setArgsValues = {
+  const toFloat = (stringValue) => {
+    return Number.parseFloat(stringValue);
+  };
+
+  const convertAssetValues = {
     USD: () => {
-      const result = balance / Number.parseFloat(coinInfo["USD"].price);
-      return result;
+      const setValues = {
+        USD: () => balance,
+        USDBLUE: () =>
+          (balance * toFloat(coinInfo["USD"].price)) /
+          toFloat(coinInfo["USDBLUE"].price),
+        ARGS: () => balance * toFloat(coinInfo["USD"].price),
+      };
+      return setValues[coinSymbol]();
     },
     USDBLUE: () => {
-      return balance / Number.parseFloat(coinInfo["USDBLUE"].price);
+      const setValues = {
+        USD: () =>
+          (balance * toFloat(coinInfo["USDBLUE"].price)) /
+          toFloat(coinInfo["USD"].price),
+        USDBLUE: () => balance,
+        ARGS: () => balance * toFloat(coinInfo["USDBLUE"].price),
+      };
+      return setValues[coinSymbol]();
     },
     ARGS: () => {
-      return balance * 1;
+      const setValues = {
+        USD: () => balance / toFloat(coinInfo["USD"].price),
+        USDBLUE: () => balance / toFloat(coinInfo["USDBLUE"].price),
+        ARGS: () => balance,
+      };
+      return setValues[coinSymbol]();
     },
   };
 
-  const setUsdValues = {
-    USD: () => {
-      return balance * 1;
-    },
-    USDBLUE: () => {
-      return (balance * Number.parseFloat(coinInfo["USD"].price)) / Number.parseFloat(coinInfo["USDBLUE"].price);
-    },
-    ARGS: () => {
-      return balance * Number.parseFloat(coinInfo["USD"].price);
-    },
-  };
+  balance = balance && convertAssetValues[asset]();
 
-  const setUsdblueValues = {
-    USD: () => {
-      return (balance * Number.parseFloat(coinInfo["USDBLUE"].price)) / Number.parseFloat(coinInfo["USD"].price);
-    },
-    USDBLUE: () => {
-      return balance * 1;
-    },
-    ARGS: () => {
-      return balance * Number.parseFloat(coinInfo["USDBLUE"].price);
-    },
-  };
-
-
-  /**
-   * @param {string} asset it represents the asset input type. e.g USD, ARGS, USDBLUE
-   */
-  const getCoinValueByAsset = () => {
-    if (asset === "ARG") {
-      return setArgsValues[coinSymbol]();
-    }
-    if (asset === "USD") {
-      return setUsdValues[coinSymbol]();
-    }
-    if (asset === "USDBLUE") {
-      return setUsdblueValues[coinSymbol]();
-    }
-  };
-  
-  balance = balance && getCoinValueByAsset();
   return (
     <article className="info-wrapper">
       <CardHeader label={label} color={classColor} coinPrice={price} />
