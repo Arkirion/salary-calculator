@@ -3,6 +3,7 @@ import { formatToArgentinaCurrency } from "../../base/utils";
 import { Period } from "../../base/enum";
 
 function Detail({ label, action, balance, coinPrice, hours }) {
+  // coinPrice is only used to check if there is value
   const getAmountByPeriod = (action) => {
     const periodCalculator = {
       hour: () => {
@@ -33,6 +34,7 @@ function Detail({ label, action, balance, coinPrice, hours }) {
   }
 
   const calculateAmount = () => {
+    console.log(coinPrice)
     const coinValue = Number.parseFloat(coinPrice);
     if (Number.isNaN(coinValue)) return "$ 0,00";
     return getAmountByPeriod(action) || 0;
