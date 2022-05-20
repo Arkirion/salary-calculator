@@ -1,3 +1,7 @@
+## OBJETIVE
+
+The main objetive of this project is be available of add a new config with just adding a config.
+
 ## Available Scripts
 
 In the project directory, you can run:

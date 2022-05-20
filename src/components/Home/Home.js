@@ -3,7 +3,7 @@ import "../../index.scss";
 import "./Home.scss";
 import CardInfo from "../CardInfo/CardInfo";
 import DownloadButton from "../DownloadButton/DownloadButton";
-import TextField from "@material-ui/core/TextField";
+
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -11,33 +11,14 @@ import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 
+import { config } from "../../base/config";
+
 function Home() {
   const [amount, setAmount] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [asset, setAsset] = useState("ARGS"); // ARG, USD, USDBLUE
-  const [coin, setCoin] = useState({
-    ARGS: {
-      symbol: "ARG",
-      price: "1",
-      label: "PESOS ARGENTINOS",
-      classColor: "color-pesosArg",
-    },
-    USD: {
-      symbol: "USD",
-      price: "",
-      label: "DOLAR OFICIAL",
-      classColor: "color-dolar",
-    },
-    USDBLUE: {
-      symbol: "USDBLUE",
-      price: "",
-      label: "DOLAR BLUE",
-      classColor: "color-dolarBlue",
-    },
-  });
+  const [asset, setAsset] = useState(config.default); // ARG, USD, USDBLUE
+  const [coin, setCoin] = useState(config.assets);
 
-
-  const DEFAULT_HOURS_DIVISOR = 160; // average hours that people work
   const dolarEndpoint =
     "https://www.dolarsi.com/api/api.php?type=valoresprincipales";
 
@@ -85,32 +66,23 @@ function Home() {
             row
             aria-label="position"
             name="position"
-            defaultValue="ARGS"
+            defaultValue={config.default}
             onChange={(event) => onChangeAsset(event.target.value)}
           >
-            <FormControlLabel
-              value="ARGS"
-              control={<Radio color="primary" />}
-              label="PESOS ARG"
-              labelPlacement="start"
-            />
-            <FormControlLabel
-              value="USD"
-              control={<Radio color="secondary" />}
-              label="DOLAR"
-              labelPlacement="start"
-            />
-            <FormControlLabel
-              value="USDBLUE"
-              control={<Radio color="secondary" />}
-              label="DOLAR BLUE"
-              labelPlacement="start"
-            />
+             { Object.keys(config.assets).map((asset) => {
+              return (
+                <FormControlLabel
+                  value={config.assets[asset].symbol}
+                  control={<Radio color={config.assets[asset].radioColor} />}
+                  label={config.assets[asset].label}
+                  labelPlacement="start"
+                />
+              );
+            })}
           </RadioGroup>
         </FormControl>
         <section className="money-section">
-          {
-          /* Keeping this code as example
+          {/* Keeping this code as example
              <TextField
             id="amount-input"
             label="Monto por mes"
@@ -123,7 +95,7 @@ function Home() {
           /> */}
           <CurrencyTextField
             id="amount-input"
-            autoFocus = {true}
+            autoFocus={true}
             label="Monto por mes"
             variant="outlined"
             decimalCharacter=","
@@ -131,23 +103,23 @@ function Home() {
             value={amount}
             currencySymbol="$"
             outputFormat="string"
-            textAlign = "left"
+            textAlign="left"
             maximumValue={100000000000}
             minimumValue={0}
-            onChange={(event, value)=> setAmount(value)}
+            onChange={(event, value) => setAmount(value)}
           />
         </section>
 
         <section className="info-frame">
           {isLoaded ? (
             <>
-              { Object.keys(coin).map((coinSymbol) => (
+              {Object.keys(coin).map((coinSymbol) => (
                 <CardInfo
                   key={coinSymbol}
                   coinInfo={coin}
                   coinSymbol={coinSymbol}
                   balance={amount}
-                  hours={DEFAULT_HOURS_DIVISOR}
+                  hours={config.hours}
                   asset={asset}
                 />
               ))}
